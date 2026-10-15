@@ -189,6 +189,10 @@ class TestMonthlyStats:
         h = habit(start=D(2026, 1, 1), archived_at=D(2026, 9, 1))
         assert monthly_stats(D(2026, 10, 1), [h], set(), {}, self.TODAY).habits == []
 
+    def test_habit_archived_on_creation_day_is_excluded(self):
+        h = habit(start=D(2026, 10, 10), archived_at=D(2026, 10, 10))
+        assert monthly_stats(D(2026, 10, 1), [h], set(), {}, self.TODAY).habits == []
+
     def test_overall_and_previous_month_delta(self):
         h = habit(start=D(2026, 9, 1))
         # Septiembre: 15 de 30 hechos (50 %). Octubre (1..14): 14 de 14 (100 %).

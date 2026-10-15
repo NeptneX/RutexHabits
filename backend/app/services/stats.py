@@ -234,10 +234,13 @@ class MonthlyStats:
 
 
 def _active_in_range(habit: HabitSpec, start: dt.date, end: dt.date) -> bool:
-    """¿El periodo de vida del hábito se solapa con [start, end]?"""
+    """¿El periodo de vida del hábito [start_date, archived_at) se solapa con [start, end]?"""
     if habit.start_date > end:
         return False
-    return habit.archived_at is None or habit.archived_at > start
+    if habit.archived_at is None:
+        return True
+    # Archivado el mismo día de su creación (o antes): nunca llegó a aplicar.
+    return habit.archived_at > max(start, habit.start_date)
 
 
 def month_ratio(
