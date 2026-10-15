@@ -16,7 +16,7 @@ dependencies = [
 # Dependencias solo para desarrollo: se instalan con  pip install -e ".[dev]"
 dev = [
     "pytest>=8",
-    "httpx>=0.27",  # TestClient de FastAPI lo necesita
+    "httpx2",  # cliente HTTP que usa el TestClient de FastAPI
 ]
 
 [build-system]
