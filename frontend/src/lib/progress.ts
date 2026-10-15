@@ -27,6 +27,7 @@ export function levelFor(done: number, total: number): ProgressLevel | null {
   return LEVELS[4]
 }
 
-/** 0.756 -> "76 %" ; null -> "—" */
+/** 0.756 -> "76 %" ; null -> "—". Usa espacio de no separación para que
+ * el número y el "%" nunca se partan en dos líneas. */
 export const formatPercent = (rate: number | null | undefined, digits = 0) =>
-  rate == null ? '—' : `${(rate * 100).toFixed(digits)} %`
+  rate == null ? '—' : `${(rate * 100).toFixed(digits)}\u00a0%`
