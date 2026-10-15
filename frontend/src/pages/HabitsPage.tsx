@@ -5,23 +5,11 @@ import { habitsApi } from '../api'
 import { Button, Card, CardTitle, EmptyState, ErrorBox, IconButton, Label, PageHeader, Spinner, TextInput } from '../components/ui'
 import { useApi } from '../hooks/useApi'
 import { formatEs, todayISO, WEEKDAY_NAMES, WEEKDAY_SHORT } from '../lib/dates'
+import { describeWeekdays, WEEKDAY_PRESETS } from '../lib/habits'
 import type { Habit, HabitInput } from '../types/api'
 
 const COLORS = ['#6366f1', '#0ea5e9', '#14b8a6', '#22c55e', '#84cc16', '#f59e0b', '#f97316', '#ef4444', '#ec4899', '#a855f7']
 const EMOJIS = ['📚', '🏋️', '🏃', '🥗', '💧', '📖', '😴', '🧘', '💻', '🎸', '🧹', '💊', '🚭', '✍️', '🌱', '✅']
-const PRESETS: { label: string; days: number[] }[] = [
-  { label: 'Todos', days: [0, 1, 2, 3, 4, 5, 6] },
-  { label: 'Laborables', days: [0, 1, 2, 3, 4] },
-  { label: 'Fin de semana', days: [5, 6] },
-]
-
-/** Texto legible de los días: "Todos los días", "L · X · V"... */
-export function describeWeekdays(days: number[]) {
-  const preset = PRESETS.find((p) => p.days.length === days.length && p.days.every((d) => days.includes(d)))
-  if (preset) return preset.label === 'Todos' ? 'Todos los días' : preset.label
-  return days.map((d) => WEEKDAY_SHORT[d]).join(' · ')
-}
-
 export default function HabitsPage() {
   const { data: habits, error, reload, setData } = useApi(() => habitsApi.list(true), [])
   // null = formulario cerrado; 'new' = creando; Habit = editando ese hábito
@@ -263,7 +251,7 @@ function HabitForm({ habit, onSaved, onCancel }: { habit?: Habit; onSaved: (h: H
             })}
           </div>
           <div className="mt-2 flex gap-2">
-            {PRESETS.map((p) => (
+            {WEEKDAY_PRESETS.map((p) => (
               <button
                 type="button"
                 key={p.label}

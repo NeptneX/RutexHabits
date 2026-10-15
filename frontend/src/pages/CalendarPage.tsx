@@ -5,17 +5,18 @@ import { useNavigate, useSearchParams } from 'react-router'
 import { daysApi } from '../api'
 import { Card, ErrorBox, PageHeader, Spinner } from '../components/ui'
 import { useApi } from '../hooks/useApi'
-import { formatEs, fromISODate, mondayIndex, parseMonthKey, shiftMonth, todayISO, toMonthKey, WEEKDAY_SHORT } from '../lib/dates'
+import { formatEs, fromISODate, mondayIndex, parseMonthKey, shiftMonth, todayISO, WEEKDAY_SHORT } from '../lib/dates'
 import { LEVELS, levelFor, NEUTRAL } from '../lib/progress'
 
 export default function CalendarPage() {
   const [params, setParams] = useSearchParams()
   const navigate = useNavigate()
-  const month = parseMonthKey(params.get('month')) ? params.get('month')! : toMonthKey(new Date())
+  const today = todayISO()
+  const currentMonth = today.slice(0, 7) // "2026-10"
+  const month = parseMonthKey(params.get('month')) ? params.get('month')! : currentMonth
   const { data, error, loading, reload } = useApi(() => daysApi.calendar(month), [month])
 
   const goTo = (key: string) => setParams({ month: key })
-  const today = todayISO()
 
   // Huecos al principio para que el día 1 caiga en su columna (lunes = 0).
   const leading = mondayIndex(parseMonthKey(month)!)
@@ -29,10 +30,10 @@ export default function CalendarPage() {
         prevLabel="Mes anterior"
         nextLabel="Mes siguiente"
         actions={
-          month !== toMonthKey(new Date()) && (
+          month !== currentMonth && (
             <button
               className="rounded-lg px-3 py-1.5 text-sm font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950"
-              onClick={() => goTo(toMonthKey(new Date()))}
+              onClick={() => goTo(currentMonth)}
             >
               Hoy
             </button>

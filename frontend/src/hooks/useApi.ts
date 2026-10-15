@@ -19,6 +19,9 @@ export function useApi<T>(fetcher: () => Promise<T>, deps: DependencyList) {
   const [state, setState] = useState<State<T>>({ data: undefined, error: null, loading: true })
   const [version, setVersion] = useState(0)
 
+  // Excepción consciente a la regla exhaustive-deps: `fetcher` es una función
+  // nueva en cada render, así que las dependencias reales las pasa quien llama.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     let cancelled = false
     setState((s) => ({ ...s, loading: true, error: null }))
