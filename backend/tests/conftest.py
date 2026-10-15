@@ -17,7 +17,7 @@ from app.api.deps import get_db, get_today
 from app.db.base import Base
 from app.main import create_app
 
-TODAY = dt.date(2026, 10, 15)  # jueves
+TODAY = dt.date(2026, 10, 15)  # jueves (fija: los tests no dependen del día real)
 
 
 @pytest.fixture

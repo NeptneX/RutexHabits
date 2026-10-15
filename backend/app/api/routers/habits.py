@@ -43,8 +43,10 @@ def create_habit(payload: HabitCreate, db: DbSession, today: Today):
         color=payload.color,
         icon=payload.icon,
         weekdays=payload.weekdays,
-        # Si la fecha es hoy guardamos la hora real; si es pasada, medianoche.
-        created_at=dt.datetime.now() if start == today else dt.datetime.combine(start, dt.time()),
+        # Usamos siempre `today` (inyectado) y no datetime.now() directamente:
+        # así los tests con fecha fija son coherentes. Hoy -> hora actual;
+        # fecha pasada -> medianoche.
+        created_at=dt.datetime.combine(start, dt.datetime.now().time() if start == today else dt.time()),
     )
     db.add(habit)
     db.commit()
